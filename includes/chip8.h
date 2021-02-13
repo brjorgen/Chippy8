@@ -1,4 +1,7 @@
-#include <stdint.h>
+#ifndef CHIP8_H
+# define CHIP8_H
+
+# include <stdint.h>
 
 # define CHIP8_SECTOR_START_RAM 0x00
 # define CHIP8_SECTOR_START_PROG 0x200
@@ -52,21 +55,21 @@ typedef enum	instruction {
 }		e_instruction;
 
 typedef struct		s_chip8{
-	uint8_t		*mem;		// RAM & shit
-	uint8_t		*display; // screen
+	uint8_t	*mem;		// RAM & shit
+	uint8_t	*display; // screen
 	uint16_t	pc; // program counter
+	uint16_t	sp; // program counter
 	uint16_t	stack[16];
-	uint16_t	stack_ptr; // stack pointer
-	uint8_t		key[16];
+	uint8_t	key[16];
 
 	struct		registers{
 		uint16_t	I;
-		uint8_t		V[16];
+		uint8_t	V[16];
 	}		registers;
 
 	struct		timers {
-		uint8_t		delay;
-		uint8_t		sound;
+		uint8_t	delay;
+		uint8_t	sound;
 	}			timers;
 }			t_chip8;
 
@@ -80,31 +83,12 @@ void	chip8_instruction_add();
 void	chip8_instruction_sub();
 void	chip8_instruction_no_op();
 void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
-void	chip8_instruction_();
+
+uint8_t	chip8_ins_get_scnd_nib(uint8_t *u8_memptr);
+uint8_t	chip8_ins_get_thrd_nib(uint8_t *u8_memptr);
+uint8_t	chip8_ins_get_hi2_nib(uint8_t *u8_memptr);
+uint8_t	chip8_ins_get_lo2_nib(uint8_t *u8_memptr);
+uint8_t	chip8_ins_get_opcode(uint8_t *u8_memptr);
+uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr);
+
+#endif
