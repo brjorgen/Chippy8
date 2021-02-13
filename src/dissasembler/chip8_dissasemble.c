@@ -74,9 +74,11 @@ void	chip8_dissasembler_print_ins(uint8_t *src, int pc){
 	instructionptr = &src[pc];
 //	instruction =  chip8_ins_get_opcode(instructionptr[0]);
 	opcode = CHIP8_GET_OPCODE(instructionptr);
-	printf("%02x %03x %s \n", opcode,
-				 instructionptr[0] << 2,
-				 chip8_dissasembler_mnem_strings[opcode]
+	printf("[%03x] %02x %02x %s \n",
+				pc,
+				instructionptr[0],
+				instructionptr[1],
+				chip8_dissasembler_mnem_strings[opcode]
 				 /* , chip8_dissasembler_mnem_args[opcode](instruction) */);
 }
 
@@ -96,18 +98,13 @@ void	chip8_dissasemble(char *filename){
 	unsigned size = ftell(file);
 	rewind(file);
 	source_buffer = (uint8_t *)malloc(sizeof(uint8_t) * size);
-	unsigned res = fread(source_buffer, 1, size, file);
-	if (res != size){
-		printf("Reading error.\n");
-		return ;
-	}
+	fread(source_buffer, size, 1, file);
+	fclose(file);
 	pc = 0;
-//	pc = 0x2;
 	while (pc < size){
 		chip8_dissasembler_print_ins(&source_buffer[pc], pc);
-		pc += 2;
+		pc++;
 	}
-	fclose(file);
 	free(source_buffer);
 }
 
