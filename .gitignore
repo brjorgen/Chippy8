@@ -1,4 +1,4 @@
-./utils/chip8-roms/
+utils/chip8-roms
 *.o
 *.a
 *.out
