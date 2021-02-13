@@ -98,7 +98,7 @@ void	chip8_dissasemble(char *filename){
 	unsigned size = ftell(file);
 	rewind(file);
 	source_buffer = (uint8_t *)malloc(sizeof(uint8_t) * size);
-	fread(source_buffer, size, 1, file);
+	fread(source_buffer + CHIP8_SECTOR_START_PROG, size, 1, file);
 	fclose(file);
 	pc = 0;
 	while (pc < size){
