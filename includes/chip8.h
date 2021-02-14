@@ -2,11 +2,13 @@
 # define CHIP8_H
 
 # include <stdint.h>
+# include <unistd.h>
 
 # define CHIP8_SECTOR_START_RAM 0x00
 # define CHIP8_SECTOR_START_PROG 0x200
 # define CHIP8_SECTOR_START_STACK 0xFA0
 # define CHIP8_SECTOR_START_PROG_ETI660 0x600
+# define CHIP8_SECTOR_START_VID_MEM 0xF00
 # define CHIP8_MEMSIZE 4096
 
 # define CHIP8_GET_INSTRUCTION(u8_memptr) (u8_memptr[0] << 8) | u8_memptr[1]
@@ -61,6 +63,7 @@ typedef struct		s_chip8{
 	uint16_t	sp; // program counter
 	uint16_t	stack[16];
 	uint8_t	key[16];
+	size_t		size;
 
 	struct		registers{
 		uint16_t	I;
@@ -79,16 +82,22 @@ typedef struct		s_ins {
 	void		(*ins_fn)(t_chip8 *);
 }			t_ins;
 
-void	chip8_instruction_add();
-void	chip8_instruction_sub();
-void	chip8_instruction_no_op();
-void	chip8_instruction_();
+void		chip8_cpu_exec_ins_jmp();
+void		chip8_cpu_exec_ins_unhandled();
 
-uint8_t	chip8_ins_get_scnd_nib(uint8_t *u8_memptr);
-uint8_t	chip8_ins_get_thrd_nib(uint8_t *u8_memptr);
-uint8_t	chip8_ins_get_hi2_nib(uint8_t *u8_memptr);
-uint8_t	chip8_ins_get_lo2_nib(uint8_t *u8_memptr);
-uint8_t	chip8_ins_get_opcode(uint8_t *u8_memptr);
+void		chip8_cpu_exec_00XX();
+void		chip8_cpu_exec_8NNX();
+void		chip8_cpu_exec_9NNX();
+
+uint8_t		chip8_ins_get_scnd_nib(uint8_t *u8_memptr);
+uint8_t		chip8_ins_get_thrd_nib(uint8_t *u8_memptr);
+uint8_t		chip8_ins_get_hi2_nib(uint8_t *u8_memptr);
+uint8_t		chip8_ins_get_lo2_nib(uint8_t *u8_memptr);
+uint8_t		chip8_ins_get_opcode(uint8_t *u8_memptr);
 uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr);
 
+size_t		chip8_load_program(char *filename,
+				   uint8_t **source_buffer_addr);
+
+void		chip8_cpu_setup(t_chip8 *chip8);
 #endif

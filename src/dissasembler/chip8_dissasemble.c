@@ -49,27 +49,13 @@ void	chip8_dissasembler_print_ins(uint8_t *src,
 				chip8_dissasembler_mnem_strings[opcode]);
 }
 
-void	get_source_buffer_and_size(char *filename,
-				   uint8_t **source_buffer_addr,
-				   size_t *size){
-	FILE		*file;
-
-	file = fopen(filename, "r");
-	fseek(file, 0, SEEK_END);
-	*size = ftell(file);
-	rewind(file);
-	*source_buffer_addr = (uint8_t *)malloc(sizeof(uint8_t) * *size + CHIP8_SECTOR_START_PROG);
-	fread(*source_buffer_addr + CHIP8_SECTOR_START_PROG, *size, 1, file);
-	fclose(file);
-}
-
 void	chip8_dissasemble(char *filename){
 	uint8_t		*source_buffer;
 	unsigned	pc;
 	size_t		size;
 
 	pc = 0x200;
-	get_source_buffer_and_size(filename, &source_buffer, &size);
+	size = chip8_load_program(filename, &source_buffer);
 	while (pc < size + CHIP8_SECTOR_START_PROG){
 		chip8_dissasembler_print_ins(source_buffer, pc);
 		pc += 2;
@@ -83,6 +69,5 @@ int	main(int ac, char *av[]){
 	else{
 		printf("usage: ./chip8_dissasemble [path_to_file]\n");
 	}
-
 	return (0);
 }

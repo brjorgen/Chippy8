@@ -1,5 +1,13 @@
 utils/chip8-roms
+*.ch8
+*.txt
+*.bin
 *.o
 *.a
 *.out
 *.so
+*.org
+*\~
+\#*\#
+\~*\~
+*\#\~
