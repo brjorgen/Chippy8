@@ -6,7 +6,6 @@ utils/chip8-roms
 *.a
 *.out
 *.so
-*.org
 *\~
 \#*\#
 \~*\~

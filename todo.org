@@ -1,0 +1,44 @@
+| Task                                | done |
+|-------------------------------------+------|
+| Implement basic program structure   | x    |
+|-------------------------------------+------|
+| Makefiles                           | x    |
+|-------------------------------------+------|
+| Impmement all instructions          |      |
+|-------------------------------------+------|
+| Unit test all instructions          |      |
+|-------------------------------------+------|
+| Add sound + graphics + PAD with SDL |      |
+|-------------------------------------+------|
+| Implement clock stuff               |      |
+|-------------------------------------+------|
+ 
+* Dissasembler
+  1. Review mnem for disas (rn it's meh)
+  2. Decide on a damn interface for the instructions. 
+	... do i want to deal with u8* or u16? u8* make me do less operations, 
+	but i do like working with these u16...
+
+* CPU
+  1. Review Chip8 spec sheet just to make sure we got it all fine
+
+* Instructions
+  1. Review all the code for the instructions (as of right now they're all placeholders lol)
+  2. implement the missing ones
+  3. implement clock stufferino
+
+* I/O (... if you can call it that)
+  1. plug in the SDL stuff
+  2. write a tile system for this tiny screen?
+  3. audio stuff??
+
+* Testing
+  1. Write unit tests for every instruction
+  2. Get incrementally more complex testing roms (fishie won't always cut it lol)
+
+* Misc
+** To separate or not to separate EMU/DISAS, _that_ is the question (it's actually not that important)
+  why not just make the dissasembler be an option from the main executable?
+  like ./chip8_emu.bin --disas or whatever?
+
+  I mean... less voluminous emulator ig? It's not like that matters.

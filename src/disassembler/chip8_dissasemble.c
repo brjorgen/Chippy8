@@ -40,7 +40,7 @@ void	chip8_dissasembler_print_ins(uint8_t *src,
 	uint8_t	opcode;
 
 	instructionptr = &src[pc];
-	opcode = chip8_ins_get_opcode(instructionptr);//CHIP8_GET_OPCODE(instructionptr);
+	opcode = chip8_ins_get_opcode(instructionptr);
 	printf("[%03x] [%04x] %02x %02x %s \n",
 				pc,
 				chip8_ins_get_ins(instructionptr),

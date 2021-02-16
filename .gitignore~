@@ -1,5 +1,0 @@
-./utils/chip8-roms/
-*.o
-*.a
-*.out
-*.so

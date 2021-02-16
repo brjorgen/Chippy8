@@ -11,15 +11,8 @@
 # define CHIP8_SECTOR_START_VID_MEM 0xF00
 # define CHIP8_MEMSIZE 4096
 
-# define CHIP8_GET_INSTRUCTION(u8_memptr) (u8_memptr[0] << 8) | u8_memptr[1]
-# define CHIP8_GET_OPCODE(u8_memptr) (u8_memptr[0] >> 4)
-
-# define CHIP8_GET_LO3(ins) (ins << 1) >> 1
-# define CHIP8_GET_LO2(ins) (ins << 2) >> 2
-# define CHIP8_GET_LO(ins) (ins << 3) >> 3
-
 typedef enum	instruction {
-	CHIP8_INS_NO_OP = 0x0000,
+	CHIP8_INS_NOP = 0x0000,
 	CHIP8_INS_CLS = 0x00E0,
 	CHIP8_INS_RET = 0x00EE,
 	CHIP8_INS_JMP = 0x1,
@@ -85,21 +78,35 @@ typedef struct		s_ins {
 uint8_t		chip8_ins_get_scnd_nib(uint8_t *u8_memptr);
 uint8_t		chip8_ins_get_thrd_nib(uint8_t *u8_memptr);
 uint8_t		chip8_ins_get_hi2_nib(uint8_t *u8_memptr);
-uint8_t		chip8_ins_get_lo2_nib(uint8_t *u8_memptr);
+//uint8_t		chip8_ins_get_lo2_nib(uint8_t *u8_memptr);
+uint16_t	chip8_ins_get_lo2_nib(uint16_t u16_ins);
 uint8_t		chip8_ins_get_opcode(uint8_t *u8_memptr);
 uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr);
 size_t		chip8_load_program(char *filename,
 				   uint8_t **source_buffer_addr);
 
+uint16_t	chip8_ins_get_lo3_nib(uint8_t u16_ins);
+
 void		chip8_cpu_setup(t_chip8 *chip8);
 
-void		(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint8_t *u8_memptr);
+// Execution stuff
+// note : void		(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint8_t *u8_memptr);
+// -- extentions to fptr
 void		chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint8_t *u8_memptr);
 void		chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint8_t *u8_memptr);
 void		chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint8_t *u8_memptr);
 void		chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint8_t *u8_memptr);
 
-void		chip8_cpu_exec_ins_jmp();
-void		chip8_cpu_exec_ins_unhandled();
+// -- instructions
+void		chip8_cpu_exec_ins_unhandled(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_skpe_vx_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_skpn_vx_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_skpe_vx_vy(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_ld_nnn_i(t_chip8 *cpu, uint8_t *u8_memptr); // nnn INTO I
+void		chip8_cpu_exec_ins_NOP(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_ld_nnn_vx(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_add_vx_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_mov_vy_vx(t_chip8 *cpu, uint8_t *u8_memptr);
 
 #endif
