@@ -1,7 +1,9 @@
+# Dissasembler stuff
 PATH_DISAS = src/disassembler
 NAME_DISAS = chip8_disassemble.bin
 NAME_LINK_DISAS = chip8_dissasembler
 
+# Emulator stuff
 PATH_EMU = src/
 NAME_EMU = chip8_emu.bin
 NAME_LINK_EMU = chip8_emulator
@@ -24,7 +26,7 @@ disas :
 
 disas-clean :
 	@echo "Removing dissasembler..."
-	@rm ./chip8_dissasemble.bin
+	@make clean -C $(PATH_DISAS)
 	@echo "done."
 
 emu :
