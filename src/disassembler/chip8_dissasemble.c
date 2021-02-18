@@ -13,7 +13,7 @@ const char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 	[0x5] = "SKPEXY VX, VY",
 	[0x6] = "MOV	NN, VX",
 	[0x7] = "ADD	VX, NN",
-	[0x8/*001*/] = "(& 0x8) SUBN, SHL, etc etc)", // call another char *?
+	[0x8/*001*/] = "(& 0x8) SUBN, SHL, etc ...", // call another char *?
 	/* [0x8002] = "SUBN	V%02xx, V%02xy", */
 	/* [0x8003] = "SUBN	V%02xx, V%02xy", */
 	/* [0x8004] = "SUBN	V%02xx, V%02xy", */
@@ -37,11 +37,13 @@ const char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 void	chip8_dissasembler_print_ins(uint8_t *src,
 				     int pc){
 	uint8_t	*instructionptr;
+	uint16_t	ins;
 	uint8_t	opcode;
 
 	instructionptr = &src[pc];
-	opcode = chip8_ins_get_opcode(instructionptr);
-	printf("[%03x] [%04x] %02x %02x %s \n",
+	ins = chip8_ins_get_ins(instructionptr);
+	opcode = chip8_ins_get_opcode(ins);
+	printf("[%03x] [%04x] %02x %02x %s\n",
 				pc,
 				chip8_ins_get_ins(instructionptr),
 				instructionptr[0],

@@ -9,6 +9,7 @@
 # define CHIP8_SECTOR_START_STACK 0xFA0
 # define CHIP8_SECTOR_START_PROG_ETI660 0x600
 # define CHIP8_SECTOR_START_VID_MEM 0xF00
+# define CHIP8_SECTOR_SIZE_VID_MEM 64 * 32
 # define CHIP8_MEMSIZE 4096
 
 typedef enum	instruction {
@@ -60,14 +61,14 @@ typedef struct		s_chip8{
 
 	struct		registers{
 		uint16_t	I;
-		uint8_t	V[16];
+		uint8_t		*V;
 	}		registers;
 
 	struct		timers {
 		uint8_t	delay;
 		uint8_t	sound;
 	}			timers;
-}			t_chip8;
+}			__attribute__((packed, aligned)) t_chip8 ;
 
 typedef struct		s_ins {
 	uint8_t	*mnemonic;
@@ -75,38 +76,56 @@ typedef struct		s_ins {
 	void		(*ins_fn)(t_chip8 *);
 }			t_ins;
 
-uint8_t		chip8_ins_get_scnd_nib(uint8_t *u8_memptr);
-uint8_t		chip8_ins_get_thrd_nib(uint8_t *u8_memptr);
-uint8_t		chip8_ins_get_hi2_nib(uint8_t *u8_memptr);
 //uint8_t		chip8_ins_get_lo2_nib(uint8_t *u8_memptr);
-uint16_t	chip8_ins_get_lo2_nib(uint16_t u16_ins);
-uint8_t		chip8_ins_get_opcode(uint8_t *u8_memptr);
-uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr);
-size_t		chip8_load_program(char *filename,
-				   uint8_t **source_buffer_addr);
-
-uint16_t	chip8_ins_get_lo3_nib(uint8_t u16_ins);
 
 void		chip8_cpu_setup(t_chip8 *chip8);
+size_t		chip8_load_program(char *filename, uint8_t **source_buffer_addr);
+
+uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr);
+uint16_t	chip8_ins_get_scnd_nib(uint16_t u16_ins);
+uint16_t	chip8_ins_get_thrd_nib(uint16_t u16_ins);
+
+uint8_t		chip8_ins_get_opcode(uint16_t u16_ins);
+uint16_t	chip8_ins_get_hi2_nib(uint16_t u16_ins);
+
+uint16_t	chip8_ins_get_lo_nib(uint16_t u16_ins);
+uint16_t	chip8_ins_get_lo2_nib(uint16_t u16_ins);
+uint16_t	chip8_ins_get_lo3_nib(uint16_t u16_ins);
+
 
 // Execution stuff
 // note : void		(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint8_t *u8_memptr);
 // -- extentions to fptr
-void		chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint16_t u16_memptr);
+void		chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint16_t u16_memptr);
+void		chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint16_t u16_memptr);
 
 // -- instructions
-void		chip8_cpu_exec_ins_unhandled(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_skpe_vx_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_skpn_vx_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_skpe_vx_vy(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_ld_nnn_i(t_chip8 *cpu, uint8_t *u8_memptr); // nnn INTO I
-void		chip8_cpu_exec_ins_NOP(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_ld_nnn_vx(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_add_vx_nnn(t_chip8 *cpu, uint8_t *u8_memptr);
-void		chip8_cpu_exec_ins_mov_vy_vx(t_chip8 *cpu, uint8_t *u8_memptr);
+void		chip8_cpu_exec_ins_cls(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_ret(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_unhandled(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_call_nnn(t_chip8 *cpu, uint16_t u16_ins);
+
+void		chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_skpe_vx_nnn(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_skpn_vx_nnn(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_skpe_vx_vy(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_ld_nnn_i(t_chip8 *cpu, uint16_t u16_ins); // nnn INTO I
+void		chip8_cpu_exec_ins_NOP(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_ld_nnn_vx(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_add_vx_nnn(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_mov_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
+
+void		chip8_cpu_exec_ins_jmp_v0_add_nnn(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_skp_kp(t_chip8 *cpu, uint16_t u16_ins);
+
+void		chip8_cpu_exec_ins_ld_vx_dt(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_ld_dt_vx(t_chip8 *cpu, uint16_t u16_ins);
+
+void		chip8_cpu_exec_ins_ld_st_vx(t_chip8 *cpu, uint16_t u16_ins);
+
+void		chip8_cpu_exec_ins_ld_add_vx_I(t_chip8 *cpu, uint16_t u16_ins);
 
 #endif

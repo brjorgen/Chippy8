@@ -1,6 +1,6 @@
 NAME = chip8_emu.bin
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -Wold-style-definition
+CFLAGS = -Wall -Werror -Wextra -pedantic -Wold-style-definition -g
 SRC = 	main.c										\
 	setup/chip8_setup.c								\
 	instructions/chip8_cpu_exec_extended.c						\

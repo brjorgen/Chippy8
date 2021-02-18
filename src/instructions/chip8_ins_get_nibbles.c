@@ -5,30 +5,38 @@ uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr){
 	return (ins);
 }
 
-uint8_t	chip8_ins_get_scnd_nib(uint8_t *u8_memptr){
-	return (u8_memptr[0] & 0x0F);
+uint16_t	chip8_ins_get_scnd_nib(uint16_t u16_ins){
+	return (u16_ins & 0x0F00);
 }
 
-uint8_t	chip8_ins_get_thrd_nib(uint8_t *u8_memptr){
-	return (u8_memptr[1] & 0xF0);
+uint16_t	chip8_ins_get_thrd_nib(uint16_t u16_ins){
+	return (u16_ins & 0x00F0);
 }
 
-uint8_t	chip8_ins_get_hi2_nib(uint8_t *u8_memptr){
-	return (u8_memptr[0] & 0xFF);
+uint16_t	chip8_ins_get_hi2_nib(uint16_t u16_ins){
+	return (u16_ins & 0xFF00);
 }
 
-/* uint8_t	chip8_ins_get_lo2_nib(uint8_t *u8_memptr){ */
-/* 	return (u8_memptr[1] & 0xFF); */
-/* } */
+uint16_t	chip8_ins_get_mid2_nibs(uint16_t u16_ins){
+	return (u16_ins & 0x0FF0);
+}
 
 uint16_t	chip8_ins_get_lo2_nib(uint16_t u16_ins){
 	return (u16_ins & 0x00FF);
+}
+
+uint16_t	chip8_ins_get_lo_nib(uint16_t u16_ins){
+	return (u16_ins & 0x000F);
 }
 
 uint16_t	chip8_ins_get_lo3_nib(uint16_t u16_ins){
 	return (u16_ins & 0x0FFF);
 }
 
-uint8_t	chip8_ins_get_opcode(uint8_t *u8_memptr){
-	return (u8_memptr[0] >> 4); 	// return (u8_memptr[1] & 0xF);
+uint16_t	chip8_ins_get_opcode(uint16_t u16_ins){
+	return (u16_ins >> 12);
 }
+
+/* uint16_t	chip8_ins_get_opcode(uint16_t u16_ins){ */
+/* 	return (((u16_ins >> 8) & 0xF0) >> 4); */
+/* } */

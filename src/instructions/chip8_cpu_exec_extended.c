@@ -1,23 +1,23 @@
 #include "../../includes/chip8.h"
 
-void	chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint8_t *u8_memptr){
+void	chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint16_t u16_ins){
 	uint16_t rest;
 
-	rest = (u8_memptr[1] & 0xFF);
-	void (*__00XX_functions[0xff])(t_chip8 *cpu, uint8_t *u8_memptr) = {
+	rest = chip8_ins_get_lo2_nib(u16_ins);
+	void (*__00XX_functions[0xff])(t_chip8 *cpu, uint16_t u16_ins) = {
 		[0x00] = &chip8_cpu_exec_ins_NOP,
-		[0xe0] = &chip8_cpu_exec_ins_unhandled,
-		[0xee] = &chip8_cpu_exec_ins_unhandled,
+		[0xe0] = &chip8_cpu_exec_ins_cls,
+		[0xee] = &chip8_cpu_exec_ins_ret,
 	};
 
-	__00XX_functions[rest](cpu, u8_memptr);
+	__00XX_functions[rest](cpu, u16_ins);
 }
 
-void	chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint8_t *u8_memptr){
-	uint8_t rest;
+void	chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint16_t u16_ins){
+	uint16_t rest;
 
-	rest = (u8_memptr[1] & 0x0F);
-	void (*__800X_functions[0x10])(t_chip8 *cpu, uint8_t *u8_memptr) = {
+	rest = chip8_ins_get_lo_nib(u16_ins);
+	void (*__800X_functions[0x10])(t_chip8 *cpu, uint16_t u8_memptr) = {
 		[0x00] = &chip8_cpu_exec_ins_mov_vy_vx,
 		[0x01] = &chip8_cpu_exec_ins_unhandled,
 		[0x02] = &chip8_cpu_exec_ins_unhandled,
@@ -29,15 +29,14 @@ void	chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint8_t *u8_memptr){
 		[0x0e] = &chip8_cpu_exec_ins_unhandled,
 	};
 
-	__800X_functions[rest](cpu, u8_memptr);
+	__800X_functions[rest](cpu, u16_ins);
 }
 
-void	chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint8_t *u8_memptr){
+void	chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint16_t u16_ins){
 	uint8_t rest;
 
-//	rest = ((u8_memptr[0] & 0x0F) | (u8_memptr[1] & 0x0F));
-	rest = (u8_memptr[1] & 0x0F);
-	void (*__900X_functions[0x10])(t_chip8 *cpu, uint8_t *u8_memptr) = {
+	rest = chip8_ins_get_lo_nib(u16_ins);
+	void (*__900X_functions[0x10])(t_chip8 *cpu, uint16_t u16_ins) = {
 		[0x01] = &chip8_cpu_exec_ins_unhandled,
 		[0x02] = &chip8_cpu_exec_ins_unhandled,
 		[0x03] = &chip8_cpu_exec_ins_unhandled,
@@ -46,25 +45,37 @@ void	chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint8_t *u8_memptr){
 		[0x06] = &chip8_cpu_exec_ins_unhandled,
 		[0x07] = &chip8_cpu_exec_ins_unhandled,
 	};
- 
-	__900X_functions[rest](cpu, u8_memptr);
+
+	__900X_functions[rest](cpu, u16_ins);
 }
 
-void	chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint8_t *u8_memptr){
+void	chip8_cpu_exec_ins_fun__extend_EXKK(t_chip8 *cpu, uint16_t u16_ins){
 	uint8_t rest;
 
-	rest = (u8_memptr[1] & 0xFF);
-	void (*__F0XX_functions[0x66])(t_chip8 *cpu, uint8_t *u8_memptr) = {
-		[0x07] = &chip8_cpu_exec_ins_unhandled,
-		[0x0a] = &chip8_cpu_exec_ins_unhandled,
-		[0x15] = &chip8_cpu_exec_ins_unhandled,
-		[0x18] = &chip8_cpu_exec_ins_unhandled,
- 		[0x1e] = &chip8_cpu_exec_ins_unhandled,
-		[0x29] = &chip8_cpu_exec_ins_unhandled,
-		[0x33] = &chip8_cpu_exec_ins_unhandled,
-		[0x55] = &chip8_cpu_exec_ins_unhandled,
-		[0x65] = &chip8_cpu_exec_ins_unhandled,
+	rest = chip8_ins_get_lo2_nib(u16_ins);
+	void (*__EXKK_functions[0xa2])(t_chip8 *cpu, uint16_t u16_ins) = {
+		[0x9e] = &chip8_cpu_exec_ins_unhandled,
+		[0xa1] = &chip8_cpu_exec_ins_unhandled,
 	};
 
-	__F0XX_functions[rest](cpu, u8_memptr);
+	__EXKK_functions[rest](cpu, u16_ins);
+}
+
+void	chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint16_t u16_ins){
+	uint8_t rest;
+
+	rest = chip8_ins_get_lo2_nib(u16_ins);
+	void (*__F0XX_functions[0x66])(t_chip8 *cpu, uint16_t u16_ins) = {
+		[07] = &chip8_cpu_exec_ins_ld_vx_dt,
+		[0x0a] = &chip8_cpu_exec_ins_unhandled, // keyboard shit
+		[15] = &chip8_cpu_exec_ins_ld_dt_vx,
+		[18] = &chip8_cpu_exec_ins_ld_st_vx,
+ 		[0x1e] = &chip8_cpu_exec_ins_ld_add_vx_I,
+		[29] = &chip8_cpu_exec_ins_unhandled,
+		[33] = &chip8_cpu_exec_ins_unhandled,
+		[55] = &chip8_cpu_exec_ins_unhandled,
+		[65] = &chip8_cpu_exec_ins_unhandled,
+	};
+
+	__F0XX_functions[rest](cpu, u16_ins);
 }
