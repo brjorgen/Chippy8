@@ -13,18 +13,7 @@ const char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 	[0x5] = "SKPEXY VX, VY",
 	[0x6] = "MOV	NN, VX",
 	[0x7] = "ADD	VX, NN",
-	[0x8/*001*/] = "(& 0x8) SUBN, SHL, etc ...", // call another char *?
-	/* [0x8002] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8003] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8004] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8005] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8006] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8007] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8008] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8006] = "SUBN	V%02xx, V%02xy", */
-	/* [0x8007] = "SUBN	V%02xx, V%02xy", //yes */
-	/* [0x800E] = "SHL	V%02xx, V%02xy", //yes */
-//	[0x9] = "SNE	V%02xx, V%02xy",
+	[0x8] = "(& 0x8) SUBN, SHL, etc ...",
 	[0x9] = "(& 0x9) SKPN, SKPE, etc...",
 	[0xa] = "LD	%02x, I",
 	[0xb] = "JMP	%02x + %02x,",
@@ -34,8 +23,8 @@ const char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 	[0xf] = "(& 0xf) (LD DELAY, VR), etc.."
 };
 
-void	chip8_dissasembler_print_ins(uint8_t *src,
-				     int pc){
+void	chip8_dissasembler_print_ins(uint8_t	*src,
+				     int	pc){
 	uint8_t	*instructionptr;
 	uint16_t	ins;
 	uint8_t	opcode;
@@ -52,7 +41,7 @@ void	chip8_dissasembler_print_ins(uint8_t *src,
 }
 
 void	chip8_dissasemble(char *filename){
-	uint8_t		*source_buffer;
+	uint8_t	*source_buffer;
 	unsigned	pc;
 	size_t		size;
 
@@ -66,9 +55,10 @@ void	chip8_dissasemble(char *filename){
 }
 
 int	main(int ac, char *av[]){
-	if (ac == 2)
+	if (ac == 2){
 		chip8_dissasemble(av[1]);
-	else{
+	}
+	else {
 		printf("usage: ./chip8_dissasemble [path_to_file]\n");
 	}
 	return (0);
