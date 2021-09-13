@@ -46,14 +46,33 @@ void	chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint16_t u16_ins){ // done. works/
 	cpu->pc = addr;
 }
 
-void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){ // done. works/
-	(void)cpu;
-	(void)u16_ins;
-	write(2, "draw unandled!\n", 15);
+void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){ // done.
+	unsigned short x = cpu->registers.V[(u16_ins & 0x0F00) >> 8];
+	unsigned short y = cpu->registers.V[(u16_ins & 0x00F0) >> 4];
+	unsigned short height = u16_ins & 0x000F;
+	unsigned short pixel;
+ 
+	cpu->registers.V[0xF] = 0;
+	for (int yline = 0; yline < height; yline++)
+	  {
+	    pixel = cpu->mem[cpu->registers.I + yline];
+	    for(int xline = 0; xline < 8; xline++)
+	      {
+		if((pixel & (0x80 >> xline)) != 0)
+		  {
+		    if(cpu->mem[CHIP8_SECTOR_START_VID_MEM +
+			     (x + xline + ((y + yline) * 64))] == 1)
+		      cpu->registers.V[0xF] = 1;
+		    cpu->mem[CHIP8_SECTOR_START_VID_MEM +
+			     (x + xline + ((y + yline) * 64))] ^= 1;
+		  }
+	      }
+	  }
+	cpu->drawn = true;
 	return ;
 }
 
-void	chip8_cpu_exec_ins_skp_kp(t_chip8 *cpu, uint16_t u16_ins){ // done. works/
+void	chip8_cpu_exec_ins_skp_kp(t_chip8 *cpu, uint16_t u16_ins){ // wip
 	(void)cpu;
 	(void)u16_ins;
 	write(1, "kp not handled!\n", 17);

@@ -2,11 +2,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+//#define DEBUG
+
+#ifdef DEBUG
+# include "./disassembler/chip8_dissasemble.c"
+#endif
+
 // gotta implement this
 void	(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint16_t u16_ins) = {
 	[0x0]	= &chip8_cpu_exec_ins_fun__extend_00XX,
 	[0x1]	= &chip8_cpu_exec_ins_jmp_nnn,
-	[0x2]	= &chip8_cpu_exec_ins_call_nnn, // call
+	[0x2]	= &chip8_cpu_exec_ins_call_nnn,
 	[0x3]	= &chip8_cpu_exec_ins_skpe_vx_nnn,
 	[0x4]	= &chip8_cpu_exec_ins_skpn_vx_nnn,
 	[0x5]	= &chip8_cpu_exec_ins_skpe_vx_vy,
@@ -29,13 +35,37 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 	uint16_t	u16_ins;
 
 	while (cpu->pc < cpu->size + CHIP8_SECTOR_START_PROG){
-//		printf("[%d] ", cpu->mem[cpu->pc]);
-		u16_ins = chip8_ins_get_ins(&cpu->mem[cpu->pc]);	// fetch & decode
-		u8_opcode = chip8_ins_get_opcode(u16_ins);		// get opcode
+		u16_ins = chip8_ins_get_ins(&cpu->mem[cpu->pc]);	// fetch
+		u8_opcode = chip8_ins_get_opcode(u16_ins);		// decode
+		#ifdef DEBUG
+		printf("[%03x] [%04x] %s\n",
+		       cpu->pc,
+		       u16_ins,
+		       chip8_dissasembler_mnem_strings[u8_opcode]);
+		#endif
+
 		chip8_cpu_exec_ins_fun[u8_opcode](cpu, u16_ins);	// execute
-		cpu->pc += 2;						// next
+
+		if (cpu->drawn == true){
+			for (int yline = 0; yline < 32; yline++){
+				for(int xline = 0; xline < 64; xline++){
+					if (cpu->mem[CHIP8_SECTOR_START_VID_MEM + (xline) + (yline * 64)]){
+						printf("* ");
+					}
+					else {
+						printf("  ");
+					}
+
+				}
+				printf("\n");
+			}
+			cpu->drawn = false;
+		}
+		cpu->pc += 2;
 	}
 }
+
+// yes 🥰
 
 int	main(int ac, char *av[]){
 	if (ac == 2){

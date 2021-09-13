@@ -8,6 +8,7 @@ chip8_emulator
 *.a
 *.out
 *.so
+*.dSYM
 *\~
 \#*\#
 \~*\~

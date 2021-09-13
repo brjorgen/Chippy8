@@ -2,6 +2,7 @@
 # define CHIP8_H
 
 # include <stdint.h>
+# include <stdbool.h>
 # include <unistd.h>
 
 # define CHIP8_SECTOR_START_RAM 0x00
@@ -58,6 +59,7 @@ typedef struct		s_chip8{
 	uint16_t	stack[16];
 	uint8_t	key[16];
 	size_t		size;
+  bool	drawn;
 
 	struct		registers{
 		uint16_t	I;
