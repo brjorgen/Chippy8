@@ -1,16 +1,33 @@
 #include "../../includes/chip8.h"
 
+#include <assert.h>
+
+bool	in_array(int a, int *b, size_t s){
+	size_t i = 0;
+	while (i < s){
+		if (a == b[i])
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 void	chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint16_t u16_ins){
 	uint16_t rest;
 
 	rest = chip8_ins_get_lo2_nib(u16_ins);
-	void (*__00XX_functions[0xff])(t_chip8 *cpu, uint16_t u16_ins) = {
+	void (*__00XX_functions[0xff + 1])(t_chip8 *cpu, uint16_t u16_ins) = {
 		[0x00] = &chip8_cpu_exec_ins_NOP,
 		[0xe0] = &chip8_cpu_exec_ins_cls,
 		[0xee] = &chip8_cpu_exec_ins_ret,
 	};
 
-	__00XX_functions[rest](cpu, u16_ins);
+	if (in_array(rest, (int [3]){0x00, 0xe0, 0xee}, 3)){
+		__00XX_functions[rest](cpu, u16_ins);
+	}
+	else {
+		chip8_cpu_exec_ins_jmp_nnn(cpu, u16_ins);
+	}
 }
 
 void	chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint16_t u16_ins){

@@ -14,10 +14,10 @@ all:	disas emu
 	ln -s $(PATH_EMU)/$(NAME_EMU) $(NAME_LINK_EMU)
 
 clean:
-	make clean -C $(PATH_EMU)
-	make clean -C $(PATH_DISAS)
 	rm $(NAME_LINK_DISAS)
 	rm $(NAME_LINK_EMU)
+	make clean -C $(PATH_EMU)
+	make clean -C $(PATH_DISAS)
 
 disas :
 	@echo "Compiling dissasembler..."

@@ -8,7 +8,6 @@
 # include "./disassembler/chip8_dissasemble.c"
 #endif
 
-// gotta implement this
 void	(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint16_t u16_ins) = {
 	[0x0]	= &chip8_cpu_exec_ins_fun__extend_00XX,
 	[0x1]	= &chip8_cpu_exec_ins_jmp_nnn,
@@ -29,6 +28,22 @@ void	(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint16_t u16_ins
 };
 
 #include <stdio.h>
+#include <time.h>
+
+void	render(t_chip8 *cpu){
+	for (int yline = 0; yline < 32; yline++){
+		for(int xline = 0; xline < 64; xline++){
+			if (cpu->mem[CHIP8_SECTOR_START_VID_MEM + (xline) + (yline * 64)]){
+				printf("* ");
+			}
+			else {
+				printf("  ");
+			}
+		}
+		printf("\n");
+	}
+	cpu->drawn = false;
+}
 
 void	chip8_cpu_loop(t_chip8 *cpu){
 	uint8_t		u8_opcode;
@@ -36,7 +51,9 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 
 	while (cpu->pc < cpu->size + CHIP8_SECTOR_START_PROG){
 		u16_ins = chip8_ins_get_ins(&cpu->mem[cpu->pc]);	// fetch
+
 		u8_opcode = chip8_ins_get_opcode(u16_ins);		// decode
+
 		#ifdef DEBUG
 		printf("[%03x] [%04x] %s\n",
 		       cpu->pc,
@@ -45,39 +62,26 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 		#endif
 
 		chip8_cpu_exec_ins_fun[u8_opcode](cpu, u16_ins);	// execute
-
-		if (cpu->drawn == true){
-			for (int yline = 0; yline < 32; yline++){
-				for(int xline = 0; xline < 64; xline++){
-					if (cpu->mem[CHIP8_SECTOR_START_VID_MEM + (xline) + (yline * 64)]){
-						printf("* ");
-					}
-					else {
-						printf("  ");
-					}
-
-				}
-				printf("\n");
-			}
-			cpu->drawn = false;
-		}
+		if (cpu->drawn)
+			render(cpu);
 		cpu->pc += 2;
 	}
 }
-
-// yes 🥰
 
 int	main(int ac, char *av[]){
 	if (ac == 2){
 		t_chip8 cpu;
 
 		chip8_cpu_setup(&cpu);
+		write(1, "Initialized machine ✅\n", 24);
 		cpu.size = chip8_load_program(av[1], &cpu.mem);
+		write(1, "Program Loaded ✅\nRunning program 😎 ... \n", 45);
 		chip8_cpu_loop(&cpu);
 		free(cpu.mem);
+		write(1, "Cleaned up ✅\nSee ya!👋\n", 27);
+		
 	}
 	else
-		write(1, "usage: ./chip8_emu.bin [path_to_file]", 37);
-	write(1, "\n", 1);
+		write(1, "usage: ./chip8_emu.bin [path_to_file]\n", 38);
 	return (0);
 }

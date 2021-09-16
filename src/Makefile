@@ -1,6 +1,6 @@
 NAME = chip8_emu.bin
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -Wold-style-definition -g
+CFLAGS = -Wall -Werror -Wextra -pedantic -Wold-style-definition -g3
 SRC = 	main.c										\
 	setup/chip8_setup.c								\
 	instructions/chip8_cpu_exec_extended.c						\
@@ -12,5 +12,3 @@ all :
 
 clean:
 	rm $(NAME)
-
-# -Wmissing-prototypes -Wstrict-prototypes

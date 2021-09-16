@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-# define NODEBUG
+
 const char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 	[0x0] = "(& 0x0) NO_OP, CLS, RET",
 	[0x1] = "JMP	NNN",
@@ -54,7 +54,7 @@ void	chip8_dissasemble(char *filename){
 	free(source_buffer);
 }
 
-#ifdef NODEBUG
+#ifndef DEBUG
 int	main(int ac, char *av[]){
 	if (ac == 2){
 		chip8_dissasemble(av[1]);

@@ -11,3 +11,4 @@ all:
 
 clean:
 	rm $(NAME)
+

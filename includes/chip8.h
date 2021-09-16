@@ -51,6 +51,9 @@ typedef enum	instruction {
 	__CHIP8_INS_TOTAL = 35,
 }		e_instruction;
 
+#define F 15
+#define SPRITE_WIDTH	8
+
 typedef struct		s_chip8{
 	uint8_t	*mem;		// RAM & shit
 	uint8_t	*display; // screen
