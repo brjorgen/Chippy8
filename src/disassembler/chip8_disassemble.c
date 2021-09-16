@@ -60,7 +60,7 @@ int	main(int ac, char *av[]){
 		chip8_dissasemble(av[1]);
 	}
 	else {
-		printf("usage: ./chip8_dissasemble [path_to_file]\n");
+		printf("usage: ./chip8_disassembler [path_to_file]\n");
 	}
 	return (0);
 }

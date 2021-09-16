@@ -82,6 +82,6 @@ int	main(int ac, char *av[]){
 		
 	}
 	else
-		write(1, "usage: ./chip8_emu.bin [path_to_file]\n", 38);
+		write(1, "usage: ./chip8_emulator [path_to_file]\n", 38);
 	return (0);
 }
