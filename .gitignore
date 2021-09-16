@@ -1,5 +1,5 @@
 utils/chip8-roms
-chip8_dissasembler
+chip8_disassembler
 chip8_emulator
 *.ch8
 *.txt
