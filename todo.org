@@ -1,6 +1,5 @@
-* TODO Basics! 
-
-| Task                               | done |
+* TODO Basics!
+| Task                               | Done |
 |------------------------------------+------|
 | Implement basic program structure  | x    |
 |------------------------------------+------|
@@ -9,27 +8,33 @@
 | Impmement all instructions         |      |
 |------------------------------------+------|
 | Unit test all instructions         |      |
-|------------------------------------+------|
-| Add sound + graphics + IO with SDL |      |
+
+* TODO Mid-project update
+| Task                    | Done |
+|-------------------------+------|
+| Review instruction code |      |
+|-------------------------+------|
+| Refactor n.1            |      |
+
+* TODO Serious Stuff!
+| Task                               | Done |
 |------------------------------------+------|
 | Implement clock stuff              |      |
 |------------------------------------+------|
-| Review instruction code            |      |
-|------------------------------------+------|
-| Refactor n.1                       |      |
+| Add sound + graphics + IO with SDL |      |
  
 * TODO Dissasembler 
-  | Task                                              | done |
-  |---------------------------------------------------+------|
-  | Review mnemonics                                  |      |
-  | Decide on instruction interface (u16 vs u8*)      | x    |
-  | Add another fptr indirection for two-part opcodes |      |
+  | Task                                               | Done |
+  |----------------------------------------------------+------|
+  | Review mnemonics (come up with something not shit) |      |
+  | Decide on instruction interface (u16 vs u8*)       | x    |
+  | Add another fptr indirection for two-part opcodes  |      |
 
-* TODO Misc questions 
-** To separate or not to separate EMU/DISAS, _that_ is the question (it's actually not that important)
+* TODO Misc questions
+** To separate or not to separate EMU/DISAS, _that_ is the question (it's probably not that important)
   why not just make the dissasembler be an option from the main executable?
   like ./chip8_emu.bin --disas or whatever?
 
   I mean... less voluminous emulator ig? It's not like that matters.
 ** How should I emulate the audio?
-** Is implementing a tile system for the SDL window necessary or can i get away with some lazy implementation?
+** Is implementing a tile system for the SDL window necessary or can i get away with some lazy ascii?
