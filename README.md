@@ -38,11 +38,11 @@ This executable takes the path to a chip8 ROM dissasembles it into a pseudo-ASM.
 **The mnemonic is currently subject to change**.
 It was bullshit I came up with for my own convenience when I was reading documentation.
 
-	***usage: ./chip8_dissasemble [path_to_file]***
+>	*usage: ./chip8_dissasemble [path_to_file]*
 
 ## The Emulator
 
 This executable takes the path to a chip8 ROM and emulates it.
 **The emulator is not entirely functional as of yet**.
 
-	***usage: ./chip8_emu.bin [path_to_file]***
+>	*usage: ./chip8_emu.bin [path_to_file]*
