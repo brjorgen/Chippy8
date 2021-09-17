@@ -1,7 +1,7 @@
 #include "../includes/chip8.h"
 #include <unistd.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 //#define DEBUG
 
 #ifdef DEBUG
@@ -26,9 +26,6 @@ void	(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint16_t u16_ins
 	[0xe]	= &chip8_cpu_exec_ins_skp_kp,
 	[0xf]	= &chip8_cpu_exec_ins_fun__extend_F0XX
 };
-
-#include <stdio.h>
-#include <time.h>
 
 void	render(t_chip8 *cpu){
 	for (int yline = 0; yline < 32; yline++){
@@ -73,13 +70,12 @@ int	main(int ac, char *av[]){
 		t_chip8 cpu;
 
 		chip8_cpu_setup(&cpu);
-		write(1, "Initialized machine ✅\n", 24);
+		printf("Initialized machine ✅\n");
 		cpu.size = chip8_load_program(av[1], &cpu.mem);
-		write(1, "Program Loaded ✅\nRunning program 😎 ... \n", 45);
+		printf("Program Loaded ✅\nRunning program 😎 ... \n");
 		chip8_cpu_loop(&cpu);
 		free(cpu.mem);
-		write(1, "Cleaned up ✅\nSee ya!👋\n", 27);
-		
+		printf("Cleaned up ✅\nSee ya!👋\n");
 	}
 	else
 		write(1, "usage: ./chip8_emulator [path_to_file]\n", 38);
