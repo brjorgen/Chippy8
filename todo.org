@@ -1,29 +1,38 @@
 * TODO Basics!
-| Task                               | Done |
-|------------------------------------+------|
-| Implement basic program structure  | x    |
-|------------------------------------+------|
-| Makefiles                          | x    |
-|------------------------------------+------|
-| Impmement all instructions         |      |
-|------------------------------------+------|
-| Unit test all instructions         |      |
+  | Task                               | Done |
+  |------------------------------------+------|
+  | Implement basic program structure  | x    |
+  |------------------------------------+------|
+  | Makefiles                          | x    |
+  |------------------------------------+------|
+  | Impmement all instructions         |      |
+  |------------------------------------+------|
+  | Unit test all instructions         |      |
 
 * TODO Mid-project update
-| Task                    | Done |
-|-------------------------+------|
-| Review instruction code |      |
-|-------------------------+------|
-| Refactor n.1            |      |
+  | Task                    | Done |
+  |-------------------------+------|
+  | Review instruction code |      |
+  |-------------------------+------|
+  | Refactor n.1            |      |
 
 * TODO Serious Stuff!
-| Task                               | Done |
-|------------------------------------+------|
-| Implement clock stuff              |      |
-|------------------------------------+------|
-| Add sound + graphics + IO with SDL |      |
+  | Task                               | Done |
+  |------------------------------------+------|
+  | handle keypresses                  |      |
+  |------------------------------------+------|
+  | implement clock stuff              |      |
+  |------------------------------------+------|
+  | add sound + graphics + io with SDL |      |
  
-* TODO Dissasembler 
+* TODO End of project update
+  | Task                    | Done |
+  |-------------------------+------|
+  | Review instruction code |      |
+  |-------------------------+------|
+  | Refactor n.1            |      |
+
+* TODO Dissasembler
   | Task                                               | Done |
   |----------------------------------------------------+------|
   | Review mnemonics (come up with something not shit) |      |
@@ -32,9 +41,9 @@
 
 * TODO Misc questions
 ** To separate or not to separate EMU/DISAS, _that_ is the question (it's probably not that important)
-  why not just make the dissasembler be an option from the main executable?
-  like ./chip8_emu.bin --disas or whatever?
+   why not just make the dissasembler be an option from the main executable?
+   like ./chip8_emu.bin --disas or whatever?
 
-  I mean... less voluminous emulator ig? It's not like that matters.
+   I mean... less voluminous emulator ig? It's not like that matters.
 ** How should I emulate the audio?
 ** Is implementing a tile system for the SDL window necessary or can i get away with some lazy ascii?

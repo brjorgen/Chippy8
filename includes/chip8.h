@@ -49,6 +49,7 @@ typedef enum	instruction {
 	CHIP8_INS_LD_I_VR = 0xF055,		      // store regixster 0 to x in mem starting in I
 	CHIP8_INS_LD_VR_I = 0xF065,		      // store regixster 0 to x in mem starting in I
 	__CHIP8_INS_TOTAL = 35,
+	// add 80 with f
 }		e_instruction;
 
 #define F 15
