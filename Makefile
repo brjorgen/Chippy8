@@ -8,10 +8,11 @@ PATH_EMU = src/
 NAME_EMU = chip8_emu.bin
 NAME_LINK_EMU = chip8_emulator
 PATH_EMU = src
+EMU_TEST_ROM = "./roms/chip8-test-rom/test_opcode.ch8"
 
 all:	disas emu
-	ln -s $(PATH_DISAS)/$(NAME_DISAS) $(NAME_LINK_DISAS)
-	ln -s $(PATH_EMU)/$(NAME_EMU) $(NAME_LINK_EMU)
+	ln -sf $(PATH_DISAS)/$(NAME_DISAS) $(NAME_LINK_DISAS)
+	ln -sf $(PATH_EMU)/$(NAME_EMU) $(NAME_LINK_EMU)
 
 clean:
 	rm $(NAME_LINK_DISAS)
@@ -38,3 +39,12 @@ emu-clean:
 	@echo "Removing chip8_emulator.bin..."
 	@make clean -C $(PATH_EMU)
 	@echo "done."
+
+emu-test:
+	@echo "Running test rom:" $(EMU_TEST_ROM)
+	./$(NAME_LINK_EMU) $(EMU_TEST_ROM)
+	@echo "done."
+
+emu-debug:
+	@echo "De-bugging " $(EMU_TEST_ROM)
+	lldb ./$(NAME_LINK_EMU) $(EMU_TEST_ROM)

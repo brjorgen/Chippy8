@@ -1,5 +1,6 @@
 #include "../../includes/chip8.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void	chip8_cpu_exec_ins_unhandled(t_chip8 *cpu, uint16_t u16_ins){
 	(void)cpu;
@@ -10,15 +11,18 @@ void	chip8_cpu_exec_ins_unhandled(t_chip8 *cpu, uint16_t u16_ins){
 
 void	chip8_cpu_exec_ins_cls(t_chip8 *cpu, uint16_t u16_ins){
 	(void)u16_ins;
+	printf("Screen cleared!");
 
 	int i = -1;
 	while (++i < CHIP8_SECTOR_SIZE_VID_MEM - 1)
-		cpu->display[i] = 0;
+		cpu->display[i] = ' '; // lol wtf 
 }
 
-void	chip8_cpu_exec_ins_ret(t_chip8 *cpu, uint16_t u16_ins){
+void	chip8_cpu_exec_ins_ret(t_chip8 *cpu, uint16_t u16_ins){ // this doesn't work at all
 	(void)u16_ins;
-	cpu->pc = cpu->stack[cpu->sp];
+	printf("wowie\n");
+	cpu->pc = cpu->stack[cpu->sp]; // segv!
+	printf("wowieeee\n");
 	cpu->sp--;
 }
 
@@ -26,7 +30,9 @@ void	chip8_cpu_exec_ins_call_nnn(t_chip8 *cpu, uint16_t u16_ins){
 	uint16_t	addr;
 
 	addr = chip8_ins_get_lo3_nib(u16_ins);
-	cpu->pc++;
+	printf(">> %x\n", addr);
+	chip8_stack_push(cpu, addr); // segv
+	printf("%x\n", addr);
 	cpu->pc = addr;
 }
 
@@ -40,7 +46,9 @@ void	chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint16_t u16_ins){ // done. works/
 	uint16_t	addr;
 
 	addr = chip8_ins_get_lo3_nib(u16_ins); // get lo3
-	cpu->pc = addr;
+	/* printf("jumping to %x\n", addr); */
+	cpu->pc = addr - 2;
+	/* printf("%x\n", cpu->pc); */
 }
 
 void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){ // done.	
@@ -50,16 +58,13 @@ void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){ // done.
 	unsigned short pixel;
  
 	cpu->registers.V[0xF] = 0;
-	for (int yline = 0; yline < height; yline++)
-	{
+	for (int yline = 0; yline < height; yline++){
 		pixel = cpu->mem[cpu->registers.I + yline];
 
-		for(int xline = 0; xline < 8; xline++)
-		{
-			if((pixel & (0x80 >> xline)) != 0)
-			{
-				if(cpu->mem[CHIP8_SECTOR_START_VID_MEM + (x + xline + ((y + yline) * 64))] == 1)
-					cpu->registers.V[0xF] = 1;
+		for(int xline = 0; xline < 8; xline++){
+			if((pixel & (0x80 >> xline)) != 0){
+				/* if(cpu->mem[CHIP8_SECTOR_START_VID_MEM + (x + xline + ((y + yline) * 64))] == 1) */
+				/* 	cpu->registers.V[0xF] = 1; */
 				cpu->mem[CHIP8_SECTOR_START_VID_MEM +
 					 (x + xline + ((y + yline) * 64))] ^= 1;
 			}
@@ -177,4 +182,17 @@ void	chip8_cpu_exec_ins_ld_add_vx_I(t_chip8 *cpu, uint16_t u16_ins){
 
 	reg = chip8_ins_get_scnd_nib(u16_ins);
 	cpu->registers.I += cpu->registers.V[reg];
+}
+
+void	chip8_cpu_exec_ins_rnd(t_chip8 *cpu, uint16_t u16_ins){
+	uint16_t u8_Vx_reg = chip8_ins_get_scnd_nib(u16_ins);
+	cpu->registers.V[u8_Vx_reg] = rand() & chip8_ins_get_lo2_nib(u16_ins);
+}
+
+void	chip8_cpu_exec_ins_sne(t_chip8 *cpu, uint16_t u16_ins){
+	uint16_t x = chip8_ins_get_scnd_nib(u16_ins);
+	uint16_t y = chip8_ins_get_thrd_nib(u16_ins);
+
+	if (cpu->registers.V[x] == cpu->registers.V[y])
+		cpu->pc += 2;
 }

@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#define FONTSET_SIZE 85
+#define FONTSET_SIZE 16 * 5
 
-const unsigned char fontset[FONTSET_SIZE] = {
+const uint8_t fontset[FONTSET_SIZE] = {
 	0xF0, 0x90, 0x90, 0x90, 0xF0,		// 0
 	0x20, 0x60, 0x20, 0x20, 0x70,		// 1
 	0xF0, 0x10, 0xF0, 0x80, 0xF0,		// 2
@@ -25,10 +25,12 @@ const unsigned char fontset[FONTSET_SIZE] = {
 };
 
 void	chip8_load_fontset(t_chip8 *ch8){
-	int i;
+	unsigned int i = 0;
+
 	for (i = 0; i < FONTSET_SIZE; i++) {
 		ch8->mem[i] = fontset[i];
 	}
+	printf("fontset loaded @ 0 to %d\n", i);
 }
 
 size_t	chip8_load_program(char *filename,
@@ -49,15 +51,19 @@ size_t	chip8_load_program(char *filename,
 }
 
 void	chip8_cpu_setup(t_chip8 *chip8){
-	chip8->mem = (uint8_t *)malloc(sizeof(uint8_t) * 4096);
+	// allocate memory map
+	chip8->mem = (uint8_t *)malloc(sizeof(uint8_t) * CHIP8_MEMSIZE);
+	bzero(chip8->mem, sizeof(uint8_t) * CHIP8_MEMSIZE);
+
+	// allocate & setup registers
 	chip8->registers.V = (uint8_t *)malloc(sizeof(uint8_t) * 16);
+	bzero(chip8->registers.V, sizeof(uint8_t) * 16);
 	if (!chip8->mem || !chip8->registers.V)
 		exit(EXIT_FAILURE);
-	bzero(chip8->mem, sizeof(uint8_t) * 4096);
-	bzero(chip8->registers.V, sizeof(uint8_t) * 16);
-	chip8_load_fontset(chip8);
 	chip8->registers.I = 0;
+
+	chip8_load_fontset(chip8);
 	chip8->pc = CHIP8_SECTOR_START_PROG;
-	chip8->sp = CHIP8_SECTOR_START_STACK;
+	chip8_stack_init(chip8);
 	chip8->display = &chip8->mem[CHIP8_SECTOR_START_VID_MEM];
 }

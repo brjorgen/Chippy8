@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+# ifndef DEBUG
 bool	in_array(int a, int *b, size_t s){
 	size_t i = 0;
 	while (i < s){
@@ -13,6 +14,7 @@ bool	in_array(int a, int *b, size_t s){
 	}
 	return (false);
 }
+# endif
 
 char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 	[0x1] = "JMP	NNN",

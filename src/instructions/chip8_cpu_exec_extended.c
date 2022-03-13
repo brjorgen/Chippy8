@@ -16,7 +16,7 @@ void	chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint16_t u16_ins){
 	uint16_t rest;
 
 	rest = chip8_ins_get_lo2_nib(u16_ins);
-	void (*__00XX_functions[0xff + 1])(t_chip8 *cpu, uint16_t u16_ins) = {
+	void (*__00XX_functions[0xee + 1])(t_chip8 *cpu, uint16_t u16_ins) = {
 		[0x00] = &chip8_cpu_exec_ins_NOP,
 		[0xe0] = &chip8_cpu_exec_ins_cls,
 		[0xee] = &chip8_cpu_exec_ins_ret,
@@ -25,9 +25,11 @@ void	chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint16_t u16_ins){
 	if (in_array(rest, (int [3]){0x00, 0xe0, 0xee}, 3)){
 		__00XX_functions[rest](cpu, u16_ins);
 	}
-	else {
-		chip8_cpu_exec_ins_jmp_nnn(cpu, u16_ins);
-	}
+	/* else { */
+	/* 	// deprecated & incorrect It should jump, exec segment, */
+	/* 	// and then come back.  */
+	/* 	/\* chip8_cpu_exec_ins_jmp_nnn(cpu, u16_ins); *\/ */
+	/* } */
 }
 
 void	chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint16_t u16_ins){
@@ -36,34 +38,19 @@ void	chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint16_t u16_ins){
 	rest = chip8_ins_get_lo_nib(u16_ins);
 	void (*__800X_functions[0x10])(t_chip8 *cpu, uint16_t u8_memptr) = {
 		[0x00] = &chip8_cpu_exec_ins_mov_vy_vx,
-		[0x01] = &chip8_cpu_exec_ins_unhandled,
-		[0x02] = &chip8_cpu_exec_ins_unhandled,
-		[0x03] = &chip8_cpu_exec_ins_unhandled,
-		[0x04] = &chip8_cpu_exec_ins_unhandled,
-		[0x05] = &chip8_cpu_exec_ins_unhandled,
-		[0x06] = &chip8_cpu_exec_ins_unhandled,
+		[0x01] = &chip8_cpu_exec_ins_or_vy_vx,
+		[0x02] = &chip8_cpu_exec_ins_and_vy_vx,
+		[0x03] = &chip8_cpu_exec_ins_xor_vy_vx,
+		[0x04] = &chip8_cpu_exec_ins_add_vy_vx,
+		[0x05] = &chip8_cpu_exec_ins_sub_vy_vx,
+		[0x06] = &chip8_cpu_exec_ins_movlsb_vx_vy_shiftr1_vx,
 		[0x07] = &chip8_cpu_exec_ins_unhandled,
+		[0x08] = &chip8_cpu_exec_ins_unhandled,
 		[0x0e] = &chip8_cpu_exec_ins_unhandled,
+		[0x0f] = &chip8_cpu_exec_ins_unhandled,
 	};
 
 	__800X_functions[rest](cpu, u16_ins);
-}
-
-void	chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint16_t u16_ins){
-	uint8_t rest;
-
-	rest = chip8_ins_get_lo_nib(u16_ins);
-	void (*__900X_functions[0x10])(t_chip8 *cpu, uint16_t u16_ins) = {
-		[0x01] = &chip8_cpu_exec_ins_unhandled,
-		[0x02] = &chip8_cpu_exec_ins_unhandled,
-		[0x03] = &chip8_cpu_exec_ins_unhandled,
-		[0x04] = &chip8_cpu_exec_ins_unhandled,
-		[0x05] = &chip8_cpu_exec_ins_unhandled,
-		[0x06] = &chip8_cpu_exec_ins_unhandled,
-		[0x07] = &chip8_cpu_exec_ins_unhandled,
-	};
-
-	__900X_functions[rest](cpu, u16_ins);
 }
 
 void	chip8_cpu_exec_ins_fun__extend_EXKK(t_chip8 *cpu, uint16_t u16_ins){

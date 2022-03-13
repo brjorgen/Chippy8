@@ -7,7 +7,8 @@
 
 # define CHIP8_SECTOR_START_RAM 0x00
 # define CHIP8_SECTOR_START_PROG 0x200
-# define CHIP8_SECTOR_START_STACK 0xFA0
+# define CHIP8_SECTOR_START_STACK 0x00 // i read some bs about 0xFA0 somewhere
+# define CHIP8_STACK_SIZE 16
 # define CHIP8_SECTOR_START_PROG_ETI660 0x600
 # define CHIP8_SECTOR_START_VID_MEM 0xF00
 # define CHIP8_SECTOR_SIZE_VID_MEM 64 * 32
@@ -55,15 +56,15 @@ typedef enum	instruction {
 #define F 15
 #define SPRITE_WIDTH	8
 
-typedef struct		s_chip8{
-	uint8_t	*mem;		// RAM & shit
-	uint8_t	*display; // screen
+typedef struct		s_chip8 {
+	uint8_t		*mem;		// RAM & shit
+	uint8_t		*display; // screen
 	uint16_t	pc; // program counter
 	uint16_t	sp; // program counter
-	uint16_t	stack[16];
-	uint8_t	key[16];
+	uint16_t	stack[CHIP8_STACK_SIZE];
+	uint8_t		key[16];
 	size_t		size;
-  bool	drawn;
+	bool		drawn;
 
 	struct		registers{
 		uint16_t	I;
@@ -74,7 +75,7 @@ typedef struct		s_chip8{
 		uint8_t	delay;
 		uint8_t	sound;
 	}			timers;
-}			__attribute__((packed, aligned)) t_chip8 ;
+}	__attribute__((packed, aligned)) t_chip8;
 
 typedef struct		s_ins {
 	uint8_t	*mnemonic;
@@ -133,5 +134,24 @@ void		chip8_cpu_exec_ins_ld_dt_vx(t_chip8 *cpu, uint16_t u16_ins);
 void		chip8_cpu_exec_ins_ld_st_vx(t_chip8 *cpu, uint16_t u16_ins);
 
 void		chip8_cpu_exec_ins_ld_add_vx_I(t_chip8 *cpu, uint16_t u16_ins);
+
+void		chip8_cpu_exec_ins_rnd(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_sne(t_chip8 *cpu, uint16_t u16_ins);
+bool		in_array(int a, int *b, size_t s);
+
+// all the 0x800N shit
+void		chip8_cpu_exec_ins_sub_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_add_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_xor_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_and_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_or_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
+void		chip8_cpu_exec_ins_movlsb_vx_vy_shiftr1_vx(t_chip8 *cpu, uint16_t u16_ins);
+
+// stack
+void			chip8_stack_init(t_chip8 *chip8);
+void			chip8_stack_push(t_chip8 *chip8, uint16_t addr);
+uint16_t		chip8_stack_pop(t_chip8	*s);
+uint16_t		chip_stack_peek(t_chip8	*s);
+bool			chip_stack_empty(t_chip8 *s);
 
 #endif
