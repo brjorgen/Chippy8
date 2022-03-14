@@ -64,6 +64,7 @@ void	chip8_cpu_setup(t_chip8 *chip8){
 
 	chip8_load_fontset(chip8);
 	chip8->pc = CHIP8_SECTOR_START_PROG;
+
 	chip8_stack_init(chip8);
 	chip8->display = &chip8->mem[CHIP8_SECTOR_START_VID_MEM];
 }

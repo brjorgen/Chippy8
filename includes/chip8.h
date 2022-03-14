@@ -5,14 +5,14 @@
 # include <stdbool.h>
 # include <unistd.h>
 
-# define CHIP8_SECTOR_START_RAM 0x00
-# define CHIP8_SECTOR_START_PROG 0x200
-# define CHIP8_SECTOR_START_STACK 0x00 // i read some bs about 0xFA0 somewhere
-# define CHIP8_STACK_SIZE 16
+# define CHIP8_SECTOR_START_RAM		0x000
+# define CHIP8_SECTOR_START_PROG	0x200
+# define CHIP8_SECTOR_START_STACK	0x000 // i read some bs about 0xFA0 somewhere
+# define CHIP8_STACK_SIZE		16
 # define CHIP8_SECTOR_START_PROG_ETI660 0x600
-# define CHIP8_SECTOR_START_VID_MEM 0xF00
-# define CHIP8_SECTOR_SIZE_VID_MEM 64 * 32
-# define CHIP8_MEMSIZE 4096
+# define CHIP8_SECTOR_START_VID_MEM	0xF00
+# define CHIP8_SECTOR_SIZE_VID_MEM	64 * 32
+# define CHIP8_MEMSIZE			4096
 
 typedef enum	instruction {
 	CHIP8_INS_NOP = 0x0000,
@@ -151,7 +151,7 @@ void		chip8_cpu_exec_ins_movlsb_vx_vy_shiftr1_vx(t_chip8 *cpu, uint16_t u16_ins)
 void			chip8_stack_init(t_chip8 *chip8);
 void			chip8_stack_push(t_chip8 *chip8, uint16_t addr);
 uint16_t		chip8_stack_pop(t_chip8	*s);
-uint16_t		chip_stack_peek(t_chip8	*s);
-bool			chip_stack_empty(t_chip8 *s);
+uint16_t		chip8_stack_peek(t_chip8 *s);
+bool			chip8_stack_empty(t_chip8 *s);
 
 #endif

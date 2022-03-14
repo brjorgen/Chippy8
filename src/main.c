@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 # include "./disassembler/chip8_disassemble.c"
@@ -42,7 +42,7 @@ void	screen_render(t_chip8 *cpu){
 	for (int yline = 0; yline < 32; yline++){
 		for(int xline = 0; xline < 64; xline++){
 			if (cpu->mem[CHIP8_SECTOR_START_VID_MEM + (xline) + (yline * 64)]){
-				printf("▤ ");
+				printf("▨ ");
 			}
 			else {
 				printf("  ");
@@ -58,7 +58,6 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 
 	while (cpu->pc < cpu->size + CHIP8_SECTOR_START_PROG){
 		u16_ins = chip8_ins_get_ins(&cpu->mem[cpu->pc]);	// fetch
-
 		u8_opcode = chip8_ins_get_opcode(u16_ins);		// decode
 
 		#ifdef DEBUG
@@ -70,7 +69,6 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 
 		chip8_cpu_exec_ins_fun[u8_opcode](cpu, u16_ins);	// execute
 		if (cpu->drawn){
-			screen_clear(cpu);
 			screen_render(cpu);
 			cpu->drawn = false;
 		}
