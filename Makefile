@@ -1,6 +1,6 @@
 # Dissasembler stuff
 PATH_DISAS = src/disassembler
-NAME_DISAS = chip8_disassemble.bin
+NAME_DISAS = chip8_disassembler.bin
 NAME_LINK_DISAS = chip8_disassembler
 
 # Emulator stuff

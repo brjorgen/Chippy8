@@ -2,47 +2,49 @@
 
 **_This is currently a work in progress_**
 
-A (**soon-to-be**) complete Chip8 emulator written _entirely_ in C.
+A (**soon-to-be**) complete Chip8 emulator written in C.
 
-as of right now **only the disassembler** is fully functional, and
-it's not even reached it's final form!
+**As of right now, only the disassembler is fully functional.**
 
-The emulator somewhat works with some of the roms. The IBM Logo
-runs without a fatal crash.
+The emulator is able to run some of the roms. 
+The IBM Logo runs without a fatal crash.
 
 ## How to compile
 The included makefile compiles two separate binaries, the emulator and the disassembler.
 
-By default, running make without specifying a rule will compile _both_ of them.
+By default, running make will compile both of them.
 
 ### Makefile Rules
 
-#### [no specified rule]
-	Compiles the emulator _and_ the disassembler
+#### [no rule]
+>	Compiles both emulator and disassembler.
 
 #### disas
-	Compiles the disassembler
-	
+>	Compiles the disassembler.
+
 #### disas-clean
-	Cleans up the disassembler: deletes the executable and the object files.
+>	Cleans up the disassembler: deletes the executable and the object files.
 
 #### emu
-	Compiles the emulator
+>	Compiles the emulator
 
 #### emu-clean
-	Cleans up the emulator stuff: deletes the executable and the object files.
+>	Cleans up the emulator stuff: deletes the executable and the object files.
 
-## The Dissasembler
+## The Disassembler
 
-This executable takes the path to a chip8 ROM dissasembles it into a pseudo-ASM.
-**The mnemonic is currently subject to change**.
-It was bullshit I came up with for my own convenience when I was reading documentation.
+This executable takes the path to a chip8 ROM disassembles it into a pseudo-ASM.
+**The mnemonic is currently subject to change**. It was bullshit I came up with as a placeholder.
 
->	*usage: ./chip8_disassemble [path_to_file]*
+>	*usage: ./chip8_disassemble [rom_file]*
+
+![sample output from the disassembler](doc/screenshots/disass.png)
 
 ## The Emulator
 
 This executable takes the path to a chip8 ROM and emulates it.
 **The emulator is not entirely functional as of yet**.
 
->	*usage: ./chip8_emulator [path_to_file]*
+>	*usage: ./chip8_emulator [rom_file]*
+
+![the emulator running the IBM logo!](doc/screenshots/IBM_logo.png)

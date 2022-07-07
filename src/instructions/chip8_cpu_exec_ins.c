@@ -29,9 +29,11 @@ void	chip8_cpu_exec_ins_call_nnn(t_chip8 *cpu, uint16_t u16_ins){
 	uint16_t	addr;
 
 	addr = chip8_ins_get_lo3_nib(u16_ins);
+
 #ifdef DEBUG	
 	printf(">>> 0x%03x called from 0x%03x [ ins id: 0x%x ]\n", addr, cpu->mem[cpu->pc], cpu->pc);
 #endif
+
 	chip8_stack_push(cpu, cpu->mem[cpu->pc]);
 	cpu->pc = addr;
 	printf("... set pc to 0x%03x\n", addr);
@@ -53,27 +55,31 @@ void	chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint16_t u16_ins){ // done. works
 }
 
 void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){ // A little shitty but whatever, it'll get updated relatively soon
-	unsigned short x = cpu->registers.V[(u16_ins & 0x0F00) >> 8];
-	unsigned short y = cpu->registers.V[(u16_ins & 0x00F0) >> 4];
-	unsigned short height = u16_ins & 0x000F;
-	unsigned short pixel;
+	uint8_t x = (u16_ins & 0x0F00) >> 8;
+	uint8_t y = (u16_ins & 0x00F0) >> 4;
+	uint8_t n = u16_ins & 0x000F;
+	uint8_t pixel_row;
  
 	cpu->registers.V[0xF] = 0;
-	for (int yline = 0; yline < height; yline++){
-		pixel = cpu->mem[cpu->registers.I + yline];
+	printf(">>> (%d, %d)\n", x, y);
+	printf("cpu->registers.V[x, y] = %d, %d\n", cpu->registers.V[x], cpu->registers.V[y]);
+	for (int yline = 0; yline < n; yline++){
+		pixel_row = cpu->mem[cpu->registers.I + yline];
 
 		for(int xline = 0; xline < 8; xline++){
-			if((pixel & (0x80 >> xline)) != 0){
-				if(cpu->mem[CHIP8_SECTOR_START_VID_MEM + (x + xline + ((y + yline) * 64))] == 1)
+
+			if(pixel_row & (0x80 >> xline)){
+				int i = CHIP8_SECTOR_START_VID_MEM + ( (cpu->registers.V[x] + xline) + ((cpu->registers.V[y] + yline) * CHIP8_VID_MEM_WIDTH) );
+				printf(">>> i: %d\n", i);
+				if(cpu->mem[i])
 					cpu->registers.V[0xF] = 1;
 				else
 					cpu->registers.V[0xF] = 0;
-				cpu->mem[CHIP8_SECTOR_START_VID_MEM +
-					 (x + xline + ((y + yline) * 64))] ^= 1;
+				cpu->mem[i] ^= 1;
 			}
 		}
-		cpu->drawn = true;
 	}
+	cpu->drawn = true;
 }
 
 void	chip8_cpu_exec_ins_skp_kp(t_chip8 *cpu, uint16_t u16_ins){ // wip

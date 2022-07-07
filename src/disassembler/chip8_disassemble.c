@@ -33,21 +33,32 @@ char *chip8_dissasembler_mnem_strings[__CHIP8_INS_TOTAL] = {
 	[0xf] = "(& 0xf) (LD DELAY, VR), etc.."
 };
 
-char	*chip8_get_mnem_str(uint8_t u8_opcode, uint16_t u16_ins){
-	int subgroups[2] = {0x0, 0x8};
+char	*__00XX_strings[0xee + 1] = {
+	[CHIP8_INS_NOP] = "NO OP",
+	[CHIP8_INS_CLS] = "CLS",
+	[CHIP8_INS_RET] = "RET",
+};
 
+char *__800N_strings[CHIP8_INS_MOV_MSB_VX_VY_SHIFTL1_VX + 1] = {
+	[CHIP8_INS_MOV_VY_VX] = "MOV VY VX",
+	[CHIP8_INS_OR_VX_VY]  = "OR VX VY",
+	[CHIP8_INS_AND_VX_VY] = "AND VX VY",
+	[CHIP8_INS_XOR_VX_VY] = "XOR VX VY",
+	[CHIP8_INS_ADD_VX_VY] = "ADD VX VY",
+	[CHIP8_INS_MOV_LSB_VX_VY_SHIFTR1_VX] = "MOV LSB VX VY SHIFT-R1 VX",
+	[CHIP8_INS_MOV_SUB_VY_VX_VX] = "MOV SUB VY VX VX",
+	[CHIP8_INS_MOV_MSB_VX_VY_SHIFTL1_VX] = "MOV MSB VX VY SHIFT-L1 VX"
+};
+
+char	*chip8_get_mnem_str(uint8_t u8_opcode, uint16_t u16_ins){
+	int subgroups[2] = {0x0, 0x8}; // 'cause there are multiple instructions with these higher bits
+	
 	if (in_array(u8_opcode, &subgroups[0], 3)){
 		switch (u8_opcode){
 		case 0x0: {
 			uint16_t rest;
+
 			rest = chip8_ins_get_lo2_nib(u16_ins);
-
-			char	*__00XX_strings[0xee + 1] = {
-				[CHIP8_INS_NOP] = "NO OP",
-				[CHIP8_INS_CLS] = "CLS",
-				[CHIP8_INS_RET] = "RET",
-			};
-
 			if (in_array(rest, (int [3]){0x00, 0xe0, 0xee}, 3)){
 				return (__00XX_strings[rest]);
 			}
@@ -57,20 +68,11 @@ char	*chip8_get_mnem_str(uint8_t u8_opcode, uint16_t u16_ins){
 		}
 		case 0x8: {
 			uint16_t rest;
+			uint16_t flag;
+
 			rest = chip8_ins_get_lo_nib(u16_ins);
+			flag = (u8_opcode * 0x1000) | rest;
 
-			uint16_t flag = (u8_opcode * 0x1000) | rest;
-
-			char *__800N_strings[CHIP8_INS_MOV_MSB_VX_VY_SHIFTL1_VX + 1] = {
-				[CHIP8_INS_MOV_VY_VX] = "MOV VY VX",
-				[CHIP8_INS_OR_VX_VY]  = "OR VX VY",
-				[CHIP8_INS_AND_VX_VY] = "AND VX VY",
-				[CHIP8_INS_XOR_VX_VY] = "XOR VX VY",
-				[CHIP8_INS_ADD_VX_VY] = "ADD VX VY",
-				[CHIP8_INS_MOV_LSB_VX_VY_SHIFTR1_VX] = "MOV LSB VX VY SHIFT-R1 VX",
-				[CHIP8_INS_MOV_SUB_VY_VX_VX] = "MOV SUB VY VX VX",
-				[CHIP8_INS_MOV_MSB_VX_VY_SHIFTL1_VX] = "MOV MSB VX VY SHIFT-L1 VX"
-			};
 			return (__800N_strings[flag]);
 		};
 		default:
@@ -85,9 +87,9 @@ char	*chip8_get_mnem_str(uint8_t u8_opcode, uint16_t u16_ins){
 
 void	chip8_dissasembler_print_ins(uint8_t	*src,
 				     int	pc){
-	uint8_t	*instructionptr;
+	uint8_t		*instructionptr;
 	uint16_t	ins;
-	uint8_t	opcode;
+	uint8_t		opcode;
 
 	instructionptr = &src[pc];
 	ins = chip8_ins_get_ins(instructionptr);
@@ -101,7 +103,7 @@ void	chip8_dissasembler_print_ins(uint8_t	*src,
 }
 
 void	chip8_dissasemble(char *filename){
-	uint8_t	*source_buffer;
+	uint8_t		*source_buffer;
 	unsigned	pc;
 	size_t		size;
 
