@@ -104,13 +104,13 @@ uint16_t	chip8_ins_get_lo3_nib(uint16_t u16_ins);
 
 // Execution stuff
 // note : void		(*chip8_cpu_exec_ins_fun[__CHIP8_INS_TOTAL])(t_chip8 *cpu, uint8_t *u8_memptr);
-// -- extentions to fptr
+// -- extentions to fptr array
 void		chip8_cpu_exec_ins_fun__extend_00XX(t_chip8 *cpu, uint16_t u16_ins);
 void		chip8_cpu_exec_ins_fun__extend_800X(t_chip8 *cpu, uint16_t u16_memptr);
 void		chip8_cpu_exec_ins_fun__extend_900X(t_chip8 *cpu, uint16_t u16_memptr);
 void		chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint16_t u16_memptr);
 
-// -- instructions
+// -- instructions (chosen to be a u16 because they're all two bytes long)
 void		chip8_cpu_exec_ins_cls(t_chip8 *cpu, uint16_t u16_ins);
 void		chip8_cpu_exec_ins_ret(t_chip8 *cpu, uint16_t u16_ins);
 void		chip8_cpu_exec_ins_unhandled(t_chip8 *cpu, uint16_t u16_ins);
@@ -150,10 +150,10 @@ void		chip8_cpu_exec_ins_or_vy_vx(t_chip8 *cpu, uint16_t u16_ins);
 void		chip8_cpu_exec_ins_movlsb_vx_vy_shiftr1_vx(t_chip8 *cpu, uint16_t u16_ins);
 
 // stack
-void			chip8_stack_init(t_chip8 *chip8);
-void			chip8_stack_push(t_chip8 *chip8, uint16_t addr);
-uint16_t		chip8_stack_pop(t_chip8	*s);
-uint16_t		chip8_stack_peek(t_chip8 *s);
-bool			chip8_stack_empty(t_chip8 *s);
+void		chip8_stack_init(t_chip8 *chip8);
+void		chip8_stack_push(t_chip8 *chip8, uint16_t addr);
+uint16_t	chip8_stack_pop(t_chip8	*s);
+uint16_t	chip8_stack_peek(t_chip8 *s);
+bool		chip8_stack_empty(t_chip8 *s);
 
 #endif

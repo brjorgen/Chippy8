@@ -70,8 +70,8 @@ void	chip8_cpu_exec_ins_fun__extend_F0XX(t_chip8 *cpu, uint16_t u16_ins){
 
 	rest = chip8_ins_get_lo2_nib(u16_ins);
 	void (*__F0XX_functions[0xFF + 1])(t_chip8 *cpu, uint16_t u16_ins) = {
-	  [0x00] = &chip8_cpu_exec_ins_unhandled,
-	  [07] = &chip8_cpu_exec_ins_ld_vx_dt,
+		[0x00] = &chip8_cpu_exec_ins_unhandled,
+		[07] = &chip8_cpu_exec_ins_ld_vx_dt,
 		[0x0a] = &chip8_cpu_exec_ins_unhandled, // keyboard shit
 		[15] = &chip8_cpu_exec_ins_ld_dt_vx,
 		[18] = &chip8_cpu_exec_ins_ld_st_vx,
