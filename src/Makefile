@@ -11,5 +11,8 @@ SRC = 	main.c										\
 all :
 	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
 
+debug:	CFLAGS+=-DDEBUG
+debug:  all
+
 clean:
 	rm $(NAME)

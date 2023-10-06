@@ -5,20 +5,24 @@ uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr){
 	return (ins);
 }
 
+uint16_t	chip8_ins_get_hi_nib(uint16_t u16_ins){
+	return (u16_ins & 0xF000) >> 12;
+}
+
 uint16_t	chip8_ins_get_scnd_nib(uint16_t u16_ins){
-	return (u16_ins & 0x0F00);
+	return (u16_ins & 0x0F00) >> 8;
 }
 
 uint16_t	chip8_ins_get_thrd_nib(uint16_t u16_ins){
-	return (u16_ins & 0x00F0);
+	return (u16_ins & 0x00F0) >> 4;
 }
 
 uint16_t	chip8_ins_get_hi2_nib(uint16_t u16_ins){
-	return (u16_ins & 0xFF00);
+	return (u16_ins & 0xFF00) >> 8;
 }
 
 uint16_t	chip8_ins_get_mid2_nibs(uint16_t u16_ins){
-	return (u16_ins & 0x0FF0);
+	return (u16_ins & 0x0FF0) >> 4;
 }
 
 uint16_t	chip8_ins_get_lo2_nib(uint16_t u16_ins){

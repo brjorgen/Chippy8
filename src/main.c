@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#define DEBUG
+/* #define DEBUG */
 
 #ifdef DEBUG
 # include "./disassembler/chip8_disassemble.c"
@@ -60,6 +60,7 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 		u16_ins = chip8_ins_get_ins(&cpu->mem[cpu->pc]);	// fetch
 		u8_opcode = chip8_ins_get_opcode(u16_ins);		// decode
 
+
 		#ifdef DEBUG
 		printf("[%03x] [%04x] %s\n",
 		       cpu->pc,
@@ -67,12 +68,14 @@ void	chip8_cpu_loop(t_chip8 *cpu){
 		       chip8_get_mnem_str(u8_opcode, u16_ins));
 		#endif
 
+		cpu->pc += 2;
+
 		chip8_cpu_exec_ins_fun[u8_opcode](cpu, u16_ins);	// execute
 		if (cpu->drawn){
 			screen_render(cpu);
 			cpu->drawn = false;
 		}
-		cpu->pc += 2;
+
 	}
 }
 

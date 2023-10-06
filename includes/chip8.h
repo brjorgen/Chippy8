@@ -36,7 +36,7 @@ typedef enum	instruction {
 	CHIP8_INS_MOV_LSB_VX_VY_SHIFTR1_VX = 0x8006, // saves LSB of VX in VY & VX >>= 1
 	CHIP8_INS_MOV_SUB_VY_VX_VX = 0x8007,	     // VX = VY - VX
 	CHIP8_INS_MOV_MSB_VX_VY_SHIFTL1_VX = 0x800E, // saves LSB of VX in VY & VX >>= 1
-	CHIP8_INS_SKIP_NEQ_VX_VY = 0x9000,	     // skip if VX != VY
+	CHIP8_INS_SKIP_NEQ_VX_VY = 0x9,	     // skip if VX != VY
 	CHIP8_INS_SET_MOV_NNN_I = 0xA,		     // move NNN into I
 	CHIP8_INS_JMP_ADD_NNN_V0 = 0xB,		     // JMP to NNNN + v0
 	CHIP8_INS_MOV_RAND_AND_NN_VX = 0xC,	     // move rand & NN (less than or eq NNN) into VX
@@ -91,6 +91,7 @@ void		chip8_cpu_setup(t_chip8 *chip8);
 size_t		chip8_load_program(char *filename, uint8_t **source_buffer_addr);
 
 uint16_t	chip8_ins_get_ins(uint8_t *u8_memptr);
+uint16_t	chip8_ins_get_hi_nib(uint16_t u16_ins);
 uint16_t	chip8_ins_get_scnd_nib(uint16_t u16_ins);
 uint16_t	chip8_ins_get_thrd_nib(uint16_t u16_ins);
 

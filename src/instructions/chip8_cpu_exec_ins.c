@@ -49,29 +49,33 @@ void	chip8_cpu_exec_ins_jmp_nnn(t_chip8 *cpu, uint16_t u16_ins){ // done. works
 	uint16_t	addr;
 
 	addr = chip8_ins_get_lo3_nib(u16_ins); // get lo3
-	/* printf("jumping to %x\n", addr); */
-	cpu->pc = addr - 2;
-	/* printf("%x\n", cpu->pc); */
+	cpu->pc = addr;
+	#ifdef DEBUG
+	printf("jumping to %x\n", addr);
+	#endif
+
 }
 
-void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){ // A little shitty but whatever, it'll get updated relatively soon
+void	chip8_cpu_exec_ins_draw(t_chip8 *cpu, uint16_t u16_ins){
 	uint8_t x = (u16_ins & 0x0F00) >> 8;
 	uint8_t y = (u16_ins & 0x00F0) >> 4;
 	uint8_t n = u16_ins & 0x000F;
 	uint8_t pixel_row;
- 
+
 	cpu->registers.V[0xF] = 0;
-	printf(">>> (%d, %d)\n", x, y);
+
+	#ifdef DEBUG
+	printf(">>> (%d, %d, %d)\n", x, y, n);
 	printf("cpu->registers.V[x, y] = %d, %d\n", cpu->registers.V[x], cpu->registers.V[y]);
+	#endif
+
 	for (int yline = 0; yline < n; yline++){
 		pixel_row = cpu->mem[cpu->registers.I + yline];
 
 		for(int xline = 0; xline < 8; xline++){
-
 			if(pixel_row & (0x80 >> xline)){
-				int i = CHIP8_SECTOR_START_VID_MEM + ( (cpu->registers.V[x] + xline) + ((cpu->registers.V[y] + yline) * CHIP8_VID_MEM_WIDTH) );
-				printf(">>> i: %d\n", i);
-				if(cpu->mem[i])
+				int i = CHIP8_SECTOR_START_VID_MEM + ((cpu->registers.V[x] + xline) + ((cpu->registers.V[y] + yline) * CHIP8_VID_MEM_WIDTH));
+				if(cpu->mem[i] != 0)
 					cpu->registers.V[0xF] = 1;
 				else
 					cpu->registers.V[0xF] = 0;
@@ -101,6 +105,9 @@ void	chip8_cpu_exec_ins_jmp_v0_add_nnn(t_chip8 *cpu, uint16_t u16_ins){ // done.
 	uint16_t	addr;
 
 	addr = chip8_ins_get_lo3_nib(u16_ins); // get lo3
+	#ifdef DEBUG
+	printf("addr: %d\n", addr);
+	#endif
 	cpu->pc = cpu->registers.V[0] + addr;
 }
 

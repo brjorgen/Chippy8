@@ -35,6 +35,10 @@ emu :
 	@make -C $(PATH_EMU)
 	@echo "done."
 
+emu-debug-build:
+	@make debug -C $(PATH_EMU)
+	ln -sf $(PATH_EMU)/$(NAME_EMU) $(NAME_LINK_EMU)_debug
+
 emu-clean:
 	@echo "Removing chip8_emulator.bin..."
 	@make clean -C $(PATH_EMU)
