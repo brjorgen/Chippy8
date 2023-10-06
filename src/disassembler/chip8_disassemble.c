@@ -128,7 +128,8 @@ char	*chip8_get_mnem_str(uint8_t u8_opcode, uint16_t u16_ins){
 		case CHIP8_INS_DRAW_XY:
 			snprintf(buff, 80, fmt_string,
 				 chip8_ins_get_scnd_nib(u16_ins),
-				 chip8_ins_get_thrd_nib(u16_ins));
+				 chip8_ins_get_thrd_nib(u16_ins),
+				 chip8_ins_get_lo_nib(u16_ins));
 			break;
 		case CHIP8_INS_SKPK_VX:
 			break;
