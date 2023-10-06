@@ -21,7 +21,7 @@ This executable takes the path to a chip8 ROM disassembles it into a pseudo-ASM.
 
 >	*usage: ./chip8_disassemble [rom_file]*
 
-![sample output from the disassembler](doc/screenshots/disass.png)
+![sample output from the disassembler](doc/screenshots/Disassembler_dump.png)
 
 ## Building
 #### make [no rule]
